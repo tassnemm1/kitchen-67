@@ -27,6 +27,21 @@ then copy the values from **Project Settings -> API** into `.env.local`:
 `.env.local` is git-ignored. Only client-safe keys belong in it — the `service_role`
 key must never end up in the source code or in the repository.
 
+## Database
+
+The SQL that defines the schema, the row level security policies and the storage
+policies lives in `supabase/migrations`. Run the files in order in the Supabase
+dashboard under **SQL Editor** when setting up a new project.
+
+Roles are stored in `public.profiles.role`. The row is created by a trigger on
+`auth.users`, and a separate trigger blocks anyone but staff from changing the
+column, so a customer cannot give themselves staff access. The first staff
+account is promoted by hand in the dashboard:
+
+```sql
+update public.profiles set role = 'staff' where id = '<user-id>';
+```
+
 ## Scripts
 
 | Script            | Description                            |
