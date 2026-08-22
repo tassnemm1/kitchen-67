@@ -1,0 +1,21 @@
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space) * 1.5);
+}
+
+.auth-page__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.auth-page__intro p {
+  color: var(--color-muted);
+}
+
+.auth-page__switch {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+  text-align: center;
+}

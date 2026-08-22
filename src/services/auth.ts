@@ -14,13 +14,16 @@ export interface RegisterInput extends Credentials {
 /**
  * Creates an auth user. The matching row in `profiles` is created by a database
  * trigger, which always gives the new user the `customer` role.
+ *
+ * Returns true when the project requires the address to be confirmed by mail,
+ * in which case no session is created and the user cannot continue yet.
  */
 export async function register({
   email,
   password,
   fullName,
-}: RegisterInput): Promise<void> {
-  const { error } = await supabase.auth.signUp({
+}: RegisterInput): Promise<{ needsEmailConfirmation: boolean }> {
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -31,6 +34,8 @@ export async function register({
   if (error) {
     throw new Error(error.message)
   }
+
+  return { needsEmailConfirmation: data.session === null }
 }
 
 export async function login({ email, password }: Credentials): Promise<void> {
