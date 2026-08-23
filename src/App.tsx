@@ -1,4 +1,7 @@
-import { Routes, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import { Layout } from './components/Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
+
 import MenuPage from './pages/MenuPage'
 import DishDetailsPage from './pages/DishDetailsPage'
 import CartPage from './pages/CartPage'
@@ -7,41 +10,61 @@ import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import OrderHistoryPage from './pages/OrderHistoryPage'
 import OrderDetailsPage from './pages/OrderDetailsPage'
 import ArchivedDishPage from './pages/ArchivedDishPage'
+
+import { LoginPage } from './pages/LoginPage'
+import { NotFoundPage } from './pages/NotFoundPage'
+import { ProfilePage } from './pages/ProfilePage'
+import { RegisterPage } from './pages/RegisterPage'
+
 import './App.css'
 
 // Main application routes
 function App() {
   return (
     <Routes>
-      {/* Menu */}
-      <Route path="/" element={<MenuPage />} />
+      <Route element={<Layout />}>
+        {/* Menu */}
+        <Route index element={<MenuPage />} />
 
-      {/* Dish details */}
-      <Route path="/dishes/:id" element={<DishDetailsPage />} />
+        {/* Authentication */}
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
 
-      {/* Shopping cart */}
-      <Route path="/cart" element={<CartPage />} />
+        {/* Dish details */}
+        <Route path="dishes/:id" element={<DishDetailsPage />} />
 
-      {/* Checkout */}
-      <Route path="/checkout" element={<CheckoutPage />} />
+        {/* Shopping cart */}
+        <Route path="cart" element={<CartPage />} />
 
-      {/* Order confirmation */}
-      <Route
-        path="/order-confirmation"
-        element={<OrderConfirmationPage />}
-      />
+        {/* Checkout */}
+        <Route path="checkout" element={<CheckoutPage />} />
 
-      {/* Customer order history */}
-      <Route path="/orders" element={<OrderHistoryPage />} />
+        {/* Order confirmation */}
+        <Route
+          path="order-confirmation"
+          element={<OrderConfirmationPage />}
+        />
 
-      {/* Customer order details */}
-      <Route path="/orders/:id" element={<OrderDetailsPage />} />
+        {/* Customer order history */}
+        <Route path="orders" element={<OrderHistoryPage />} />
 
-      {/* Archived dish from order history */}
-      <Route
-        path="/orders/:orderId/dishes/:dishId"
-        element={<ArchivedDishPage />}
-      />
+        {/* Customer order details */}
+        <Route path="orders/:id" element={<OrderDetailsPage />} />
+
+        {/* Archived dish from order history */}
+        <Route
+          path="orders/:orderId/dishes/:dishId"
+          element={<ArchivedDishPage />}
+        />
+
+        {/* Protected pages */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="profile" element={<ProfilePage />} />
+        </Route>
+
+        {/* Not found */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   )
 }
