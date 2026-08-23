@@ -52,4 +52,4 @@ values
     119.00,
     false
   )
-on conflict do nothing;
+on conflict (name) do nothing;
