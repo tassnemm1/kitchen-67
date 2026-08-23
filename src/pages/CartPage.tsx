@@ -2,49 +2,63 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import EmptyState from '../components/EmptyState'
 
+// Cart item type
+type CartItem = {
+  id: string
+  name: string
+  price: number
+  quantity: number
+}
+
+// Get saved cart
+function getSavedCart(): CartItem[] {
+  const savedCart = localStorage.getItem('cart')
+
+  if (!savedCart) {
+    return []
+  }
+
+  return JSON.parse(savedCart)
+}
+
 // Shopping cart page
 function CartPage() {
   // Cart items
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: 'Margherita Pizza',
-      price: 119,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      name: 'Chicken Burger',
-      price: 129,
-      quantity: 1,
-    },
-  ])
+  const [cartItems, setCartItems] = useState<CartItem[]>(getSavedCart)
+
+  // Save cart
+  const saveCart = (items: CartItem[]) => {
+    setCartItems(items)
+    localStorage.setItem('cart', JSON.stringify(items))
+  }
 
   // Increase quantity
-  const increaseQuantity = (id: number) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
+  const increaseQuantity = (id: string) => {
+    const updatedCart = cartItems.map((item) =>
+      item.id === id
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
     )
+
+    saveCart(updatedCart)
   }
 
   // Decrease quantity
-  const decreaseQuantity = (id: number) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+  const decreaseQuantity = (id: string) => {
+    const updatedCart = cartItems.map((item) =>
+      item.id === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
     )
+
+    saveCart(updatedCart)
   }
 
   // Remove item
-  const removeItem = (id: number) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
+  const removeItem = (id: string) => {
+    const updatedCart = cartItems.filter((item) => item.id !== id)
+
+    saveCart(updatedCart)
   }
 
   // Total price

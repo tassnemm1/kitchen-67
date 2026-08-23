@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import LoadingMessage from '../components/LoadingMessage'
 import ErrorMessage from '../components/ErrorMessage'
 
 import { getDishById, type Dish } from '../services/dishes'
+
+// Cart item type
+type CartItem = {
+  id: string
+  name: string
+  price: number
+  quantity: number
+}
 
 // Dish details page
 function DishDetailsPage() {
@@ -41,6 +49,33 @@ function DishDetailsPage() {
     void loadDish()
   }, [id])
 
+  // Add dish to cart
+  function addToCart() {
+    if (!dish) {
+      return
+    }
+
+    const savedCart = localStorage.getItem('cart')
+    const cart: CartItem[] = savedCart
+      ? JSON.parse(savedCart)
+      : []
+
+    const existingItem = cart.find((item) => item.id === dish.id)
+
+    if (existingItem) {
+      existingItem.quantity += 1
+    } else {
+      cart.push({
+        id: dish.id,
+        name: dish.name,
+        price: dish.price,
+        quantity: 1,
+      })
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart))
+  }
+
   // Loading
   if (isLoading) {
     return <LoadingMessage />
@@ -62,6 +97,16 @@ function DishDetailsPage() {
       <h1>{dish.name}</h1>
       <p>{dish.description}</p>
       <p>{dish.price} kr</p>
+
+      {/* Add to cart */}
+      <button type="button" onClick={addToCart}>
+        Add to Cart
+      </button>
+
+      {/* Go to cart */}
+      <Link to="/cart">
+        <button type="button">View Cart</button>
+      </Link>
     </main>
   )
 }
