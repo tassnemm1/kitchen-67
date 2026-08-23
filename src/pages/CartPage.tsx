@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import EmptyState from '../components/EmptyState'
 
 // Shopping cart page
 function CartPage() {
@@ -57,7 +58,7 @@ function CartPage() {
       <h1>Shopping Cart</h1>
 
       {/* Empty cart message */}
-      {cartItems.length === 0 && <p>Your cart is empty.</p>}
+      {cartItems.length === 0 && <EmptyState />}
 
       {/* Cart items */}
       {cartItems.map((item) => (
@@ -83,7 +84,9 @@ function CartPage() {
       ))}
 
       {/* Total price */}
-      {cartItems.length > 0 && <p>Total: {totalPrice} kr</p>}
+      {cartItems.length > 0 && (
+        <p>Total: {totalPrice} kr</p>
+      )}
     </main>
   )
 }
