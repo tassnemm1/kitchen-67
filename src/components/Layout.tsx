@@ -32,9 +32,9 @@ export function Layout() {
             <span className="status">Loading…</span>
           ) : session ? (
             <>
-              <span className="layout__user">
+              <NavLink to="/profile" className="layout__user">
                 {profile?.full_name || session.user.email}
-              </span>
+              </NavLink>
               <button
                 type="button"
                 className="button button--quiet layout__sign-out"

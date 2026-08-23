@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
-import { getProfile, getSession, logout, onAuthStateChange } from '../services/auth'
+import { getSession, logout, onAuthStateChange } from '../services/auth'
+import { getProfile } from '../services/profiles'
 import type { Profile } from '../types/database'
 import { AuthContext } from './auth-context'
 import type { AuthContextValue } from './auth-context'
@@ -85,6 +86,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [userId])
 
+  const refreshProfile = useCallback(async () => {
+    if (!userId) return
+    const profile = await getProfile(userId)
+    setProfileResult({ userId, profile, message: null })
+  }, [userId])
+
   const signOut = useCallback(async () => {
     await logout()
     setSession(null)
@@ -107,9 +114,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isLoading,
       error,
       isStaff: profile?.role === 'staff',
+      refreshProfile,
       signOut,
     }),
-    [session, profile, isLoading, error, signOut],
+    [session, profile, isLoading, error, refreshProfile, signOut],
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

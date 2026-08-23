@@ -13,6 +13,8 @@ export interface AuthContextValue {
   error: string | null
   /** Convenience flag for the staff only parts of the app. */
   isStaff: boolean
+  /** Reads the profile again, after it has been changed somewhere else. */
+  refreshProfile: () => Promise<void>
   signOut: () => Promise<void>
 }
 
