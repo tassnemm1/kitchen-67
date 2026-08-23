@@ -23,3 +23,19 @@ export async function getActiveDishes(): Promise<Dish[]> {
 
   return data
 }
+
+// Get one active dish
+export async function getDishById(id: string): Promise<Dish | null> {
+  const { data, error } = await supabase
+    .from('dishes')
+    .select('id, name, description, price, is_active')
+    .eq('id', id)
+    .eq('is_active', true)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}

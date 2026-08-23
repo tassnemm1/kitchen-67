@@ -1,29 +1,57 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-// Test dishes
-const dishes = [
-  {
-    id: 1,
-    name: 'Margherita Pizza',
-    description: 'Tomato sauce, mozzarella and basil',
-    price: 119,
-  },
-  {
-    id: 2,
-    name: 'Chicken Burger',
-    description: 'Chicken, salad and dressing',
-    price: 129,
-  },
-]
+import LoadingMessage from '../components/LoadingMessage'
+import ErrorMessage from '../components/ErrorMessage'
+
+import { getDishById, type Dish } from '../services/dishes'
 
 // Dish details page
 function DishDetailsPage() {
   const { id } = useParams()
 
-  // Find selected dish
-  const dish = dishes.find((dish) => dish.id === Number(id))
+  // Dish
+  const [dish, setDish] = useState<Dish | null>(null)
 
-  // Show message if dish does not exist
+  // Page states
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+
+  // Load dish
+  useEffect(() => {
+    async function loadDish() {
+      if (!id) {
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        setIsLoading(true)
+        setIsError(false)
+
+        const data = await getDishById(id)
+        setDish(data)
+      } catch {
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    void loadDish()
+  }, [id])
+
+  // Loading
+  if (isLoading) {
+    return <LoadingMessage />
+  }
+
+  // Error
+  if (isError) {
+    return <ErrorMessage />
+  }
+
+  // Dish not found
   if (!dish) {
     return <p>Dish not found</p>
   }
