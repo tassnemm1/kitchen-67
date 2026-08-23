@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import EmptyState from '../components/EmptyState'
 
 // Shopping cart page
@@ -19,7 +20,7 @@ function CartPage() {
     },
   ])
 
-  // Increase item quantity
+  // Increase quantity
   const increaseQuantity = (id: number) => {
     setCartItems(
       cartItems.map((item) =>
@@ -30,7 +31,7 @@ function CartPage() {
     )
   }
 
-  // Decrease item quantity
+  // Decrease quantity
   const decreaseQuantity = (id: number) => {
     setCartItems(
       cartItems.map((item) =>
@@ -41,12 +42,12 @@ function CartPage() {
     )
   }
 
-  // Remove item from cart
+  // Remove item
   const removeItem = (id: number) => {
     setCartItems(cartItems.filter((item) => item.id !== id))
   }
 
-  // Calculate total price
+  // Total price
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -54,16 +55,16 @@ function CartPage() {
 
   return (
     <main>
-      {/* Page title */}
       <h1>Shopping Cart</h1>
 
-      {/* Empty cart message */}
+      {/* Empty cart */}
       {cartItems.length === 0 && <EmptyState />}
 
       {/* Cart items */}
       {cartItems.map((item) => (
         <div key={item.id}>
           <h2>{item.name}</h2>
+
           <p>{item.price} kr</p>
           <p>Quantity: {item.quantity}</p>
 
@@ -76,16 +77,24 @@ function CartPage() {
             -
           </button>
 
-          {/* Remove item */}
+          {/* Remove button */}
           <button onClick={() => removeItem(item.id)}>
             Remove
           </button>
         </div>
       ))}
 
-      {/* Total price */}
+      {/* Total and checkout */}
       {cartItems.length > 0 && (
-        <p>Total: {totalPrice} kr</p>
+        <>
+          <p>Total: {totalPrice} kr</p>
+
+          <Link to="/checkout">
+            <button type="button">
+              Go to Checkout
+            </button>
+          </Link>
+        </>
       )}
     </main>
   )
