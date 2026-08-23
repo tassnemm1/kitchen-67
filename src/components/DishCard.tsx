@@ -1,26 +1,33 @@
 import { Link } from 'react-router-dom'
 
-// Dish card properties
+// Dish card props
 type DishCardProps = {
-  id: number
+  id: string
   name: string
   description: string
   price: number
 }
 
 // Dish card
-function DishCard({ id, name, description, price }: DishCardProps) {
+function DishCard({
+  id,
+  name,
+  description,
+  price,
+}: DishCardProps) {
   return (
-    <article>
+    <div>
       {/* Dish name */}
       <h2>
         <Link to={`/dishes/${id}`}>{name}</Link>
       </h2>
 
-      {/* Dish information */}
+      {/* Dish description */}
       <p>{description}</p>
+
+      {/* Dish price */}
       <p>{price} kr</p>
-    </article>
+    </div>
   )
 }
 

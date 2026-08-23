@@ -1,48 +1,47 @@
+import { useEffect, useState } from 'react'
+
 import DishCard from '../components/DishCard'
 import LoadingMessage from '../components/LoadingMessage'
 import ErrorMessage from '../components/ErrorMessage'
 import EmptyState from '../components/EmptyState'
 
-// Test dishes
-const dishes = [
-  {
-    id: 1,
-    name: 'Margherita Pizza',
-    description: 'Tomato sauce, mozzarella and basil',
-    price: 119,
-    isActive: true,
-  },
-  {
-    id: 2,
-    name: 'Chicken Burger',
-    description: 'Chicken, salad and dressing',
-    price: 129,
-    isActive: true,
-  },
-  {
-    id: 3,
-    name: 'Pasta',
-    description: 'Pasta with creamy sauce',
-    price: 109,
-    isActive: false,
-  },
-]
+import { getActiveDishes, type Dish } from '../services/dishes'
 
 // Menu page
 function MenuPage() {
-  // Temporary states until Supabase is connected
-  const isLoading = false
-  const isError = false
+  // Dishes
+  const [dishes, setDishes] = useState<Dish[]>([])
 
-  // Show only active dishes
-  const activeDishes = dishes.filter((dish) => dish.isActive)
+  // Page states
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
 
-  // Loading state
+  // Load dishes
+  useEffect(() => {
+    async function loadDishes() {
+      try {
+        setIsLoading(true)
+        setIsError(false)
+
+        const data = await getActiveDishes()
+
+        setDishes(data)
+      } catch {
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    void loadDishes()
+  }, [])
+
+  // Loading
   if (isLoading) {
     return <LoadingMessage />
   }
 
-  // Error state
+  // Error
   if (isError) {
     return <ErrorMessage />
   }
@@ -52,16 +51,16 @@ function MenuPage() {
       {/* Page title */}
       <h1>Menu</h1>
 
-      {/* Empty state */}
-      {activeDishes.length === 0 && <EmptyState />}
+      {/* Empty menu */}
+      {dishes.length === 0 && <EmptyState />}
 
       {/* Dish list */}
-      {activeDishes.map((dish) => (
+      {dishes.map((dish) => (
         <DishCard
           key={dish.id}
           id={dish.id}
           name={dish.name}
-          description={dish.description}
+          description={dish.description ?? ''}
           price={dish.price}
         />
       ))}
