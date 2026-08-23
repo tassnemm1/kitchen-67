@@ -1,5 +1,9 @@
+import { Link, useParams } from 'react-router-dom'
+
 // Archived dish page
 function ArchivedDishPage() {
+  const { orderId } = useParams()
+
   return (
     <main>
       {/* Page title */}
@@ -12,6 +16,11 @@ function ArchivedDishPage() {
 
       {/* Archived message */}
       <p>This dish is no longer available to order.</p>
+
+      {/* Back to order */}
+      <Link to={`/orders/${orderId}`}>
+        <button type="button">Back to Order</button>
+      </Link>
     </main>
   )
 }

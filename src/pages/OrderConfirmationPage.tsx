@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 // Test order items
 const orderItems = [
   {
@@ -40,6 +42,15 @@ function OrderConfirmationPage() {
       <p>
         <strong>Total: 248 kr</strong>
       </p>
+
+      {/* Navigation */}
+      <Link to="/">
+        <button type="button">Back to Menu</button>
+      </Link>
+
+      <Link to="/orders">
+        <button type="button">My Orders</button>
+      </Link>
     </main>
   )
 }

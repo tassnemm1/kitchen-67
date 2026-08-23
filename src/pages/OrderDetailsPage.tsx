@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 // Test order
 const order = {
@@ -21,7 +21,7 @@ const order = {
   ],
 }
 
-// Customer order details page
+// Order details page
 function OrderDetailsPage() {
   const { id } = useParams()
 
@@ -48,6 +48,11 @@ function OrderDetailsPage() {
       <p>
         <strong>Total: {order.total} kr</strong>
       </p>
+
+      {/* Back to orders */}
+      <Link to="/orders">
+        <button type="button">Back to My Orders</button>
+      </Link>
     </main>
   )
 }
