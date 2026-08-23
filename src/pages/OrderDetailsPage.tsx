@@ -1,34 +1,68 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-// Test order
-const order = {
-  id: 1001,
-  status: 'Obehandlad',
-  total: 248,
-  items: [
-    {
-      id: 1,
-      name: 'Margherita Pizza',
-      quantity: 1,
-      price: 119,
-    },
-    {
-      id: 2,
-      name: 'Chicken Burger',
-      quantity: 1,
-      price: 129,
-    },
-  ],
-}
+import LoadingMessage from '../components/LoadingMessage'
+import ErrorMessage from '../components/ErrorMessage'
+
+import {
+  getCustomerOrderById,
+  type CustomerOrderDetails,
+} from '../services/orders'
 
 // Order details page
 function OrderDetailsPage() {
   const { id } = useParams()
 
+  // Order
+  const [order, setOrder] = useState<CustomerOrderDetails | null>(null)
+
+  // Page states
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+
+  // Load order
+  useEffect(() => {
+    async function loadOrder() {
+      if (!id) {
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        setIsLoading(true)
+        setIsError(false)
+
+        const data = await getCustomerOrderById(id)
+        setOrder(data)
+      } catch {
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    void loadOrder()
+  }, [id])
+
+  // Loading
+  if (isLoading) {
+    return <LoadingMessage />
+  }
+
+  // Error
+  if (isError) {
+    return <ErrorMessage />
+  }
+
+  // Order not found
+  if (!order) {
+    return <p>Order not found.</p>
+  }
+
   return (
     <main>
       {/* Page title */}
-      <h1>Order #{id}</h1>
+      <h1>Order #{order.order_number}</h1>
 
       {/* Order status */}
       <p>Status: {order.status}</p>
@@ -38,15 +72,16 @@ function OrderDetailsPage() {
 
       {order.items.map((item) => (
         <div key={item.id}>
-          <h3>{item.name}</h3>
+          <h3>{item.dish_name}</h3>
           <p>Quantity: {item.quantity}</p>
-          <p>Price: {item.price} kr</p>
+          <p>Price: {item.unit_price} kr</p>
+          <p>Line total: {item.line_total} kr</p>
         </div>
       ))}
 
       {/* Order total */}
       <p>
-        <strong>Total: {order.total} kr</strong>
+        <strong>Total: {order.total_amount} kr</strong>
       </p>
 
       {/* Back to orders */}

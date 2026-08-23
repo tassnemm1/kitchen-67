@@ -1,56 +1,64 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
-// Test order items
-const orderItems = [
-  {
-    id: 1,
-    name: 'Margherita Pizza',
-    quantity: 1,
-    price: 119,
-  },
-  {
-    id: 2,
-    name: 'Chicken Burger',
-    quantity: 1,
-    price: 129,
-  },
-]
+// Order type
+type Order = {
+  id: string
+  order_number: number
+  status: string
+  total_amount: number
+}
+
+// Navigation state
+type ConfirmationState = {
+  order: Order
+}
 
 // Order confirmation page
 function OrderConfirmationPage() {
+  const location = useLocation() as {
+    state: ConfirmationState | null
+  }
+
+  // Get order from checkout
+  const state = location.state
+  const order = state?.order
+
+  // No order data
+  if (!order) {
+    return (
+      <main>
+        <h1>Order Confirmation</h1>
+
+        <p>No order information found.</p>
+
+        <Link to="/">Back to Menu</Link>
+      </main>
+    )
+  }
+
   return (
     <main>
       {/* Page title */}
       <h1>Order Confirmation</h1>
 
+      {/* Success message */}
+      <p>Your order has been placed successfully.</p>
+
       {/* Order information */}
-      <p>Order number: #1001</p>
-      <p>Status: Obehandlad</p>
-
-      {/* Order items */}
-      <h2>Your order</h2>
-
-      {orderItems.map((item) => (
-        <div key={item.id}>
-          <h3>{item.name}</h3>
-          <p>Quantity: {item.quantity}</p>
-          <p>Price: {item.price} kr</p>
-        </div>
-      ))}
+      <p>Order number: #{order.order_number}</p>
+      <p>Status: {order.status}</p>
 
       {/* Order total */}
       <p>
-        <strong>Total: 248 kr</strong>
+        <strong>Total: {order.total_amount} kr</strong>
       </p>
 
       {/* Navigation */}
-      <Link to="/">
-        <button type="button">Back to Menu</button>
-      </Link>
+      <Link to="/">Back to Menu</Link>
 
-      <Link to="/orders">
-        <button type="button">My Orders</button>
-      </Link>
+      <br />
+
+      <Link to="/orders">My Orders</Link>
     </main>
   )
 }
