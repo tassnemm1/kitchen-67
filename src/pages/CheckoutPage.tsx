@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 // Form data
 type CheckoutForm = {
@@ -9,20 +10,24 @@ type CheckoutForm = {
 
 // Checkout page
 function CheckoutPage() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CheckoutForm>()
 
-  // Handle order form
+  // Submit order
   const onSubmit = (data: CheckoutForm) => {
     console.log(data)
+
+    // Go to confirmation page
+    navigate('/order-confirmation')
   }
 
   return (
     <main>
-      {/* Page title */}
       <h1>Checkout</h1>
 
       {/* Pickup information */}
@@ -63,8 +68,10 @@ function CheckoutPage() {
         />
         {errors.phone && <p>{errors.phone.message}</p>}
 
-        {/* Submit order */}
-        <button type="submit">Place order</button>
+        {/* Place order */}
+        <button type="submit">
+          Place order
+        </button>
       </form>
     </main>
   )
