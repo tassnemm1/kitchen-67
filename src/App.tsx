@@ -6,6 +6,8 @@ import { LoginPage } from './pages/LoginPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { RegisterPage } from './pages/RegisterPage'
+import { StaffDashboardPage } from './pages/staff/StaffDashboardPage'
+import { StaffLayout } from './pages/staff/StaffLayout'
 
 /**
  * Every view has its own URL, so the browser back and forward buttons work and
@@ -21,6 +23,14 @@ export default function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<ProfilePage />} />
+        </Route>
+
+        {/* Guarding the route only hides the views. What actually protects
+            the data is the row level security in Supabase. */}
+        <Route element={<ProtectedRoute role="staff" />}>
+          <Route path="staff" element={<StaffLayout />}>
+            <Route index element={<StaffDashboardPage />} />
+          </Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

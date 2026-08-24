@@ -5,7 +5,7 @@ import './Layout.css'
 
 /** Header and page frame shared by every route. */
 export function Layout() {
-  const { session, profile, isLoading, signOut } = useAuth()
+  const { session, profile, isLoading, isStaff, signOut } = useAuth()
   const [signOutError, setSignOutError] = useState<string | null>(null)
 
   async function handleSignOut() {
@@ -32,6 +32,7 @@ export function Layout() {
             <span className="status">Loading…</span>
           ) : session ? (
             <>
+              {isStaff && <NavLink to="/staff">Staff</NavLink>}
               <NavLink to="/profile" className="layout__user">
                 {profile?.full_name || session.user.email}
               </NavLink>
