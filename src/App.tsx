@@ -7,6 +7,7 @@ import { NotFoundPage } from './pages/NotFoundPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { RegisterPage } from './pages/RegisterPage'
 import { StaffDashboardPage } from './pages/staff/StaffDashboardPage'
+import { StaffDishesPage } from './pages/staff/StaffDishesPage'
 import { StaffLayout } from './pages/staff/StaffLayout'
 
 /**
@@ -30,6 +31,7 @@ export default function App() {
         <Route element={<ProtectedRoute role="staff" />}>
           <Route path="staff" element={<StaffLayout />}>
             <Route index element={<StaffDashboardPage />} />
+            <Route path="dishes" element={<StaffDishesPage />} />
           </Route>
         </Route>
 
