@@ -7,6 +7,16 @@ import EmptyState from '../components/EmptyState'
 
 import { getActiveDishes, type Dish } from '../services/dishes'
 
+// Menu categories
+const categories = [
+  'Burgers',
+  'Bowls',
+  'Salads',
+  'Sides',
+  'Desserts',
+  'Drinks',
+]
+
 // Menu page
 function MenuPage() {
   // Dishes
@@ -47,23 +57,53 @@ function MenuPage() {
   }
 
   return (
-    <main>
-      {/* Page title */}
-      <h1>Menu</h1>
+    <main className="menu-page">
+      {/* Page heading */}
+      <section className="menu-hero">
+        <p className="menu-kicker">Freshly prepared for pickup</p>
+
+        <h1>Our Menu</h1>
+
+        <p className="menu-intro">
+          Choose your favorites and build your perfect order.
+        </p>
+      </section>
 
       {/* Empty menu */}
       {dishes.length === 0 && <EmptyState />}
 
-      {/* Dish list */}
-      {dishes.map((dish) => (
-        <DishCard
-          key={dish.id}
-          id={dish.id}
-          name={dish.name}
-          description={dish.description ?? ''}
-          price={dish.price}
-        />
-      ))}
+      {/* Menu categories */}
+      {categories.map((category) => {
+        const categoryDishes = dishes.filter(
+          (dish) => dish.category === category,
+        )
+
+        if (categoryDishes.length === 0) {
+          return null
+        }
+
+        return (
+          <section className="menu-section" key={category}>
+            <div className="menu-section-heading">
+              <h2>{category}</h2>
+              <span>{categoryDishes.length} items</span>
+            </div>
+
+            <div className="menu-grid">
+              {categoryDishes.map((dish) => (
+               <DishCard
+                 key={dish.id}
+                 id={dish.id}
+                 name={dish.name}
+                 description={dish.description ?? ''}
+                 price={dish.price}
+                 imagePath={dish.image_path}
+               />
+              ))}
+            </div>
+          </section>
+        )
+      })}
     </main>
   )
 }
