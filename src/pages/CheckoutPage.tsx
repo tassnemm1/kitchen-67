@@ -66,6 +66,7 @@ function CheckoutPage() {
         state: {
           order,
           customer: data,
+          items: cartItems,
         },
       })
     } catch (caught: unknown) {

@@ -8,9 +8,18 @@ type Order = {
   total_amount: number
 }
 
+// Order item type
+type OrderItem = {
+  id: string
+  name: string
+  price: number
+  quantity: number
+}
+
 // Navigation state
 type ConfirmationState = {
   order: Order
+  items: OrderItem[]
 }
 
 // Order confirmation page
@@ -19,9 +28,10 @@ function OrderConfirmationPage() {
     state: ConfirmationState | null
   }
 
-  // Get order from checkout
+  // Get order and items from checkout
   const state = location.state
   const order = state?.order
+  const items = state?.items ?? []
 
   // No order data
   if (!order) {
@@ -47,6 +57,19 @@ function OrderConfirmationPage() {
       {/* Order information */}
       <p>Order number: #{order.order_number}</p>
       <p>Status: {order.status}</p>
+
+      {/* Order items */}
+      <h2>Your order</h2>
+
+      {items.map((item) => (
+        <div key={item.id}>
+          <p>
+            {item.quantity} × {item.name}
+          </p>
+
+          <p>{item.price * item.quantity} kr</p>
+        </div>
+      ))}
 
       {/* Order total */}
       <p>
