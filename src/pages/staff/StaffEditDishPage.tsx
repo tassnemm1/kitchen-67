@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { DishForm } from '../../components/DishForm'
+import { DishImageUploader } from '../../components/DishImageUploader'
 import { useDish } from '../../hooks/useDishes'
 import { updateDish } from '../../services/dishes'
 import type { DishInput } from '../../services/dishes'
@@ -41,6 +42,8 @@ export function StaffEditDishPage() {
             )}
 
             <DishForm dish={dish} submitLabel="Save changes" onSubmit={handleSave} />
+
+            <DishImageUploader dish={dish} onChanged={reload} />
 
             <Link to="/staff/dishes">Back to the menu</Link>
           </>
