@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { supabase } from '../lib/supabase'
@@ -27,6 +28,8 @@ function DishCard({
   price,
   imagePath,
 }: DishCardProps) {
+  const [isAdded, setIsAdded] = useState(false)
+
   // Get public image URL
   const imageUrl = imagePath
     ? supabase.storage
@@ -56,22 +59,32 @@ function DishCard({
     }
 
     localStorage.setItem('cart', JSON.stringify(cart))
+
+    setIsAdded(true)
+
+    setTimeout(() => {
+      setIsAdded(false)
+    }, 1500)
   }
 
   return (
     <article className="dish-card">
       {/* Dish image */}
       {imageUrl && (
-        <img
-          className="dish-card-image"
-          src={imageUrl}
-          alt={name}
-        />
+        <div className="dish-card-image-wrapper">
+          <img
+            className="dish-card-image"
+            src={imageUrl}
+            alt={name}
+          />
+        </div>
       )}
 
       {/* Dish information */}
       <div className="dish-card-content">
-        <h3 className="dish-card-title">{name}</h3>
+        <h3 className="dish-card-title">
+          {name}
+        </h3>
 
         <p className="dish-card-description">
           {description}
@@ -92,11 +105,14 @@ function DishCard({
         </Link>
 
         <button
-          className="button dish-card-button"
+          className={`button dish-card-button${
+            isAdded ? ' dish-card-button--added' : ''
+          }`}
           type="button"
           onClick={addToCart}
+          aria-live="polite"
         >
-          Add to cart
+          {isAdded ? 'Added ✓' : 'Add to cart'}
         </button>
       </div>
     </article>

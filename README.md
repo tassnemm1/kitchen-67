@@ -1,4 +1,4 @@
-# I Require Sustenance
+# Kitchen 67
 
 A food ordering service for a single restaurant. Guests browse the menu, add dishes
 to a cart and place a pickup order. Restaurant staff manage the menu and incoming
@@ -10,6 +10,9 @@ Built with React, React Router, TypeScript and Supabase (Auth, Database and Stor
 
 ### Customer
 
+
+- Welcome landing page with a full-screen restaurant background video.
+- Navigate from the welcome page to the restaurant menu.
 - Sign up and sign in with Supabase Authentication.
 - Browse active dishes on the menu.
 - View dish details.
@@ -181,8 +184,7 @@ npx type-coverage --project tsconfig.app.json --detail
 
 ## Team
 
-This project was developed as a group assignment.
-
+This project was developed as a group assignment by Tasnem and Rojina.
 The work was divided between the team members using separate tasks and feature
 areas. Both team members also participate in testing, database setup,
 documentation and final integration.

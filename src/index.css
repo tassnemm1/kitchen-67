@@ -702,6 +702,19 @@ a {
   margin: 0;
 }
 
+#root .dish-card-button--added {
+  color: #fff;
+  background: linear-gradient(135deg, #4f8a58, #35633d);
+  box-shadow: 0 10px 24px rgba(53, 99, 61, .28);
+  animation: cart-added .35s ease;
+}
+
+@keyframes cart-added {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
 
 /* Dish image - smaller */
 
@@ -718,6 +731,22 @@ a {
   object-position: center;
 
   border-radius: .85rem;
+}
+
+/* Dish image wrapper */
+#root .dish-card-image-wrapper {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: .85rem;
+}
+
+#root .dish-card-image-wrapper .dish-card-image {
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  object-position: center top;
+  transform-origin: center top;
 }
 
 
