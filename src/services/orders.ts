@@ -3,6 +3,8 @@ import { supabase } from '../lib/supabase'
 // Cart item
 export type OrderCartItem = {
   id: string
+  name: string
+  price: number
   quantity: number
 }
 
@@ -71,6 +73,8 @@ export async function createOrder(
   const items = cartItems.map((item) => ({
     order_id: order.id,
     dish_id: item.id,
+    dish_name: item.name,
+    unit_price: item.price,
     quantity: item.quantity,
   }))
 
@@ -143,6 +147,10 @@ export async function getCustomerOrderById(
 
   return {
     ...order,
-    items,
+    items: items.map((item) => ({
+      ...item,
+      line_total:
+        item.line_total ?? item.unit_price * item.quantity,
+    })),
   }
 }

@@ -9,6 +9,7 @@ type CartItem = {
   name: string
   price: number
   quantity: number
+  options?: unknown[]
 }
 
 // Dish card props
@@ -45,7 +46,12 @@ function DishCard({
       ? JSON.parse(savedCart)
       : []
 
-    const existingItem = cart.find((item) => item.id === id)
+    // Find the same dish without custom options
+    const existingItem = cart.find(
+      (item) =>
+        item.id === id &&
+        (!item.options || item.options.length === 0),
+    )
 
     if (existingItem) {
       existingItem.quantity += 1

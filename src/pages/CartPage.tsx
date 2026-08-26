@@ -2,12 +2,22 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import EmptyState from '../components/EmptyState'
 
+// Selected dish option
+type SelectedOption = {
+  optionId: string
+  name: string
+  removed: boolean
+  extraQuantity: number
+  extraPrice: number
+}
+
 // Cart item type
 type CartItem = {
   id: string
   name: string
   price: number
   quantity: number
+  options?: SelectedOption[]
 }
 
 // Get saved cart
@@ -33,9 +43,9 @@ function CartPage() {
   }
 
   // Increase quantity
-  const increaseQuantity = (id: string) => {
-    const updatedCart = cartItems.map((item) =>
-      item.id === id
+  const increaseQuantity = (itemIndex: number) => {
+    const updatedCart = cartItems.map((item, index) =>
+      index === itemIndex
         ? { ...item, quantity: item.quantity + 1 }
         : item
     )
@@ -44,19 +54,21 @@ function CartPage() {
   }
 
   // Decrease quantity
-  const decreaseQuantity = (id: string) => {
-    const updatedCart = cartItems.map((item) =>
-      item.id === id && item.quantity > 1
+  const decreaseQuantity = (itemIndex: number) => {
+    if (cartItems[itemIndex].quantity === 1) {
+      const updatedCart = cartItems.filter(
+        (_, index) => index !== itemIndex,
+      )
+
+      saveCart(updatedCart)
+      return
+    }
+
+    const updatedCart = cartItems.map((item, index) =>
+      index === itemIndex
         ? { ...item, quantity: item.quantity - 1 }
         : item
     )
-
-    saveCart(updatedCart)
-  }
-
-  // Remove item
-  const removeItem = (id: string) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id)
 
     saveCart(updatedCart)
   }
@@ -75,26 +87,35 @@ function CartPage() {
       {cartItems.length === 0 && <EmptyState />}
 
       {/* Cart items */}
-      {cartItems.map((item) => (
-        <div key={item.id}>
+      {cartItems.map((item, index) => (
+        <div key={`${item.id}-${index}`}>
           <h2>{item.name}</h2>
 
           <p>{item.price} kr</p>
           <p>Quantity: {item.quantity}</p>
 
+          {/* Selected options */}
+          {item.options && item.options.length > 0 && (
+            <ul className="cart-options">
+              {item.options.map((option) => (
+                <li key={option.optionId}>
+                  {option.removed
+                    ? `No ${option.name}`
+                    : `Extra ${option.name} x${option.extraQuantity}`}
+                </li>
+              ))}
+            </ul>
+          )}
+
           {/* Quantity buttons */}
-          <button onClick={() => increaseQuantity(item.id)}>
+          <button onClick={() => increaseQuantity(index)}>
             +
           </button>
 
-          <button onClick={() => decreaseQuantity(item.id)}>
+          <button onClick={() => decreaseQuantity(index)}>
             -
           </button>
 
-          {/* Remove button */}
-          <button onClick={() => removeItem(item.id)}>
-            Remove
-          </button>
         </div>
       ))}
 

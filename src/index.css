@@ -394,6 +394,32 @@ a {
   color: var(--color-muted);
 }
 
+/* Dish options */
+#root .dish-option {
+  margin: .75rem 0;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: .75rem;
+}
+
+#root .dish-option--removed {
+  opacity: .65;
+  background: #f3eee8;
+}
+
+#root .dish-option-status {
+  margin-bottom: .5rem;
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+#root .cart-options {
+  margin: .75rem 0;
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+}
+
 
 /* Account pages */
 
@@ -690,11 +716,23 @@ a {
   text-decoration: none;
 }
 
+.dish-card-link::after {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+}
+
 .dish-card-link:hover {
   color: var(--color-accent-dark);
 }
 
 #root .dish-card-button {
+  position: relative;
+  z-index: 2;
+
   flex-shrink: 0;
 
   min-width: 7.5rem;
