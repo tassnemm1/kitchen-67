@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { OrderStatusBadge } from '../../components/OrderStatusBadge'
 import { useOrders } from '../../hooks/useOrders'
@@ -7,7 +8,12 @@ import { OPEN_ORDER_STATUSES } from '../../lib/orderStatus'
 const OPEN_STATUSES = OPEN_ORDER_STATUSES
 
 export function StaffOrdersPage() {
-  const { data, isLoading, error } = useOrders(OPEN_STATUSES)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const showAll = searchParams.get('show') === 'all'
+
+  // Both branches are stable values, which is what the hook needs to tell one
+  // query from another.
+  const { data, isLoading, error } = useOrders(showAll ? undefined : OPEN_STATUSES)
   const orders = data ?? []
 
   return (
@@ -17,11 +23,30 @@ export function StaffOrdersPage() {
         <p>Oldest first, so nothing is left waiting.</p>
       </div>
 
+      <div className="filters" role="group" aria-label="Filter orders">
+        <button
+          type="button"
+          className={`filters__item${showAll ? '' : ' filters__item--on'}`}
+          aria-pressed={!showAll}
+          onClick={() => setSearchParams({})}
+        >
+          Open
+        </button>
+        <button
+          type="button"
+          className={`filters__item${showAll ? ' filters__item--on' : ''}`}
+          aria-pressed={showAll}
+          onClick={() => setSearchParams({ show: 'all' })}
+        >
+          All
+        </button>
+      </div>
+
       <DataState
         isLoading={isLoading}
         error={error}
         isEmpty={orders.length === 0}
-        emptyMessage="No open orders right now."
+        emptyMessage={showAll ? 'No orders yet.' : 'No open orders right now.'}
         loadingMessage="Loading the orders…"
       >
         <ul className="order-list">
