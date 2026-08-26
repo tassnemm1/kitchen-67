@@ -171,3 +171,22 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
 }
+
+.staff__danger {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: var(--space);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+}
+
+.staff__danger h2 {
+  font-size: 1.0625rem;
+}
+
+.staff__danger p {
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
