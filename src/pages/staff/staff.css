@@ -151,3 +151,10 @@
 .staff__toolbar .button {
   text-decoration: none;
 }
+
+.staff__saved {
+  padding: 0.75rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}

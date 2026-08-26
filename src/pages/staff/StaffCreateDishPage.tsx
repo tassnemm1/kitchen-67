@@ -7,8 +7,9 @@ export function StaffCreateDishPage() {
   const navigate = useNavigate()
 
   async function handleCreate(input: DishInput) {
-    await createDish(input)
-    await navigate('/staff/dishes', { replace: true })
+    const dish = await createDish(input)
+    // Straight on to the edit view, so the dish can be adjusted right away.
+    await navigate(`/staff/dishes/${dish.id}`, { replace: true })
   }
 
   return (

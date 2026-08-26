@@ -68,7 +68,9 @@ export function StaffDishesPage() {
           {dishes.map((dish) => (
             <li key={dish.id} className="dish-row">
               <div className="dish-row__body">
-                <span className="dish-row__name">{dish.name}</span>
+                <Link to={`/staff/dishes/${dish.id}`} className="dish-row__name">
+                  {dish.name}
+                </Link>
                 <p className="dish-row__meta">
                   {dish.category} · {formatPrice(dish.price)}
                   {!dish.is_active && ' · Archived'}
