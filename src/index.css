@@ -68,7 +68,8 @@ a {
   font-weight: 600;
 }
 
-.field input {
+.field input,
+.field textarea {
   width: 100%;
   padding: 0.75rem;
   font: inherit;
@@ -78,12 +79,18 @@ a {
   border-radius: var(--radius);
 }
 
-.field input:focus-visible {
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 1px;
 }
 
-.field input[aria-invalid='true'] {
+.field input[aria-invalid='true'],
+.field textarea[aria-invalid='true'] {
   border-color: var(--color-error);
 }
 

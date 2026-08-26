@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { useDishes } from '../../hooks/useDishes'
 import { formatPrice } from '../../lib/format'
@@ -37,18 +37,24 @@ export function StaffDishesPage() {
         <p>Archived dishes stay here, so old orders remain readable.</p>
       </div>
 
-      <div className="filters" role="group" aria-label="Filter dishes">
-        {FILTERS.map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            className={`filters__item${filter === option.value ? ' filters__item--on' : ''}`}
-            aria-pressed={filter === option.value}
-            onClick={() => setSearchParams({ show: option.value })}
-          >
-            {option.label}
-          </button>
-        ))}
+      <div className="staff__toolbar">
+        <div className="filters" role="group" aria-label="Filter dishes">
+          {FILTERS.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={`filters__item${filter === option.value ? ' filters__item--on' : ''}`}
+              aria-pressed={filter === option.value}
+              onClick={() => setSearchParams({ show: option.value })}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        <Link to="/staff/dishes/new" className="button">
+          New dish
+        </Link>
       </div>
 
       <DataState

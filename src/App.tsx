@@ -6,6 +6,7 @@ import { LoginPage } from './pages/LoginPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { RegisterPage } from './pages/RegisterPage'
+import { StaffCreateDishPage } from './pages/staff/StaffCreateDishPage'
 import { StaffDashboardPage } from './pages/staff/StaffDashboardPage'
 import { StaffDishesPage } from './pages/staff/StaffDishesPage'
 import { StaffLayout } from './pages/staff/StaffLayout'
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="staff" element={<StaffLayout />}>
             <Route index element={<StaffDashboardPage />} />
             <Route path="dishes" element={<StaffDishesPage />} />
+            <Route path="dishes/new" element={<StaffCreateDishPage />} />
           </Route>
         </Route>
 
