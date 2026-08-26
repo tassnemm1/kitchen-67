@@ -114,13 +114,26 @@
 }
 
 .dish-row {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
   gap: 0.75rem;
+  align-items: center;
   padding: 0.75rem;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
+}
+
+.dish-row__image {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.dish-row__image--empty {
+  background-color: var(--color-bg);
+  border: 1px dashed var(--color-border);
 }
 
 .dish-row__body {

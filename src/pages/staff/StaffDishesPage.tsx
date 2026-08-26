@@ -2,6 +2,7 @@ import { Link, useSearchParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { useDishes } from '../../hooks/useDishes'
 import { formatPrice } from '../../lib/format'
+import { getDishImageUrl } from '../../services/dishImages'
 import type { Dish } from '../../types/database'
 
 type DishFilter = 'active' | 'archived' | 'all'
@@ -65,19 +66,29 @@ export function StaffDishesPage() {
         loadingMessage="Loading the menu…"
       >
         <ul className="dish-list">
-          {dishes.map((dish) => (
-            <li key={dish.id} className="dish-row">
-              <div className="dish-row__body">
-                <Link to={`/staff/dishes/${dish.id}`} className="dish-row__name">
-                  {dish.name}
-                </Link>
-                <p className="dish-row__meta">
-                  {dish.category} · {formatPrice(dish.price)}
-                  {!dish.is_active && ' · Archived'}
-                </p>
-              </div>
-            </li>
-          ))}
+          {dishes.map((dish) => {
+            const imageUrl = getDishImageUrl(dish.image_path)
+
+            return (
+              <li key={dish.id} className="dish-row">
+                {imageUrl ? (
+                  <img className="dish-row__image" src={imageUrl} alt="" />
+                ) : (
+                  <span className="dish-row__image dish-row__image--empty" />
+                )}
+
+                <div className="dish-row__body">
+                  <Link to={`/staff/dishes/${dish.id}`} className="dish-row__name">
+                    {dish.name}
+                  </Link>
+                  <p className="dish-row__meta">
+                    {dish.category} · {formatPrice(dish.price)}
+                    {!dish.is_active && ' · Archived'}
+                  </p>
+                </div>
+              </li>
+            )
+          })}
         </ul>
       </DataState>
     </section>
