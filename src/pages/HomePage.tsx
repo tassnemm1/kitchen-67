@@ -1,28 +1,43 @@
-import { Link } from 'react-router'
-import { useAuth } from '../hooks/useAuth'
+import { Link } from 'react-router-dom'
 
+// Welcome page
 export function HomePage() {
-  const { session, profile, isLoading, error } = useAuth()
-
   return (
-    <section className="auth-page">
-      <div className="auth-page__intro">
-        <h1>I Require Sustenance</h1>
-        <p>Order food from the restaurant and pick it up when it is ready.</p>
-      </div>
+    <main className="home-page">
+      {/* Background video */}
+      <video
+        className="home-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source
+          src="/videos/kitchen.mp4"
+          type="video/mp4"
+        />
+      </video>
 
-      {isLoading ? (
-        <p className="status" role="status">Loading…</p>
-      ) : error ? (
-        <p className="alert" role="alert">{error}</p>
-      ) : session ? (
-        <p>Welcome back, {profile?.full_name || session.user.email}.</p>
-      ) : (
-        <p>
-          <Link to="/login">Log in</Link> or{' '}
-          <Link to="/register">sign up</Link> to place an order.
+      {/* Dark overlay */}
+      <div className="home-overlay" />
+
+      {/* Welcome content */}
+      <div className="home-content">
+        <p className="home-welcome">Welcome to</p>
+
+        <h1>Kitchen 67</h1>
+
+        <p className="home-tagline">
+          Fresh flavors. Made for you.
         </p>
-      )}
-    </section>
+
+        <Link
+          className="home-button"
+          to="/menu"
+        >
+          Start Your Order
+        </Link>
+      </div>
+    </main>
   )
 }

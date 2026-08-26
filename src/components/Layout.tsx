@@ -25,7 +25,7 @@ export function Layout() {
       <header className="layout__header">
         {/* Brand */}
         <Link to="/" className="layout__brand">
-          I Require Sustenance
+           Kitchen 67
         </Link>
 
         {/* Main navigation */}

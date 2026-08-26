@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
+import { HomePage } from './pages/HomePage'
 import MenuPage from './pages/MenuPage'
 import DishDetailsPage from './pages/DishDetailsPage'
 import CartPage from './pages/CartPage'
@@ -22,9 +23,13 @@ import './App.css'
 function App() {
   return (
     <Routes>
+      {/* Welcome page */}
+      <Route index element={<HomePage />} />
+
+      {/* Main application */}
       <Route element={<Layout />}>
         {/* Menu */}
-        <Route index element={<MenuPage />} />
+        <Route path="menu" element={<MenuPage />} />
 
         {/* Authentication */}
         <Route path="login" element={<LoginPage />} />
