@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { OrderStatusBadge } from '../../components/OrderStatusBadge'
 import { useOrders } from '../../hooks/useOrders'
@@ -53,7 +53,9 @@ export function StaffOrdersPage() {
           {orders.map((order) => (
             <li key={order.id} className="order-row">
               <div className="order-row__head">
-                <span className="order-row__number">Order #{order.order_number}</span>
+                <Link to={`/staff/orders/${order.id}`} className="order-row__number">
+                  Order #{order.order_number}
+                </Link>
                 <OrderStatusBadge status={order.status} />
               </div>
 

@@ -11,6 +11,7 @@ import { StaffDashboardPage } from './pages/staff/StaffDashboardPage'
 import { StaffDishesPage } from './pages/staff/StaffDishesPage'
 import { StaffEditDishPage } from './pages/staff/StaffEditDishPage'
 import { StaffLayout } from './pages/staff/StaffLayout'
+import { StaffOrderDetailPage } from './pages/staff/StaffOrderDetailPage'
 import { StaffOrdersPage } from './pages/staff/StaffOrdersPage'
 
 /**
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="dishes/new" element={<StaffCreateDishPage />} />
             <Route path="dishes/:dishId" element={<StaffEditDishPage />} />
             <Route path="orders" element={<StaffOrdersPage />} />
+            <Route path="orders/:orderId" element={<StaffOrderDetailPage />} />
           </Route>
         </Route>
 
