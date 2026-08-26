@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { useDishes } from '../../hooks/useDishes'
 import { formatPrice } from '../../lib/format'
 import { getDishImageUrl } from '../../services/dishImages'
+import { setDishActive } from '../../services/dishes'
 import type { Dish } from '../../types/database'
 
 type DishFilter = 'active' | 'archived' | 'all'
@@ -28,14 +30,35 @@ export function StaffDishesPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const filter = parseFilter(searchParams.get('show'))
 
-  const { data, isLoading, error } = useDishes(true)
+  const { data, isLoading, error, reload } = useDishes(true)
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
+
   const dishes = (data ?? []).filter((dish) => matchesFilter(dish, filter))
+
+  async function toggleArchived(dish: Dish) {
+    setActionError(null)
+    setBusyId(dish.id)
+
+    try {
+      await setDishActive(dish.id, !dish.is_active)
+      reload()
+    } catch (caught: unknown) {
+      setActionError(
+        caught instanceof Error
+          ? caught.message
+          : 'Could not change the dish. Please try again.',
+      )
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   return (
     <section className="staff__section">
       <div className="staff__intro">
         <h1>Dishes</h1>
-        <p>Archived dishes stay here, so old orders remain readable.</p>
+        <p>Dishes are archived, never deleted, so old orders stay readable.</p>
       </div>
 
       <div className="staff__toolbar">
@@ -57,6 +80,12 @@ export function StaffDishesPage() {
           New dish
         </Link>
       </div>
+
+      {actionError && (
+        <p className="alert" role="alert">
+          {actionError}
+        </p>
+      )}
 
       <DataState
         isLoading={isLoading}
@@ -86,6 +115,19 @@ export function StaffDishesPage() {
                     {!dish.is_active && ' · Archived'}
                   </p>
                 </div>
+
+                <button
+                  type="button"
+                  className="button button--quiet dish-row__action"
+                  disabled={busyId === dish.id}
+                  onClick={() => void toggleArchived(dish)}
+                >
+                  {busyId === dish.id
+                    ? 'Saving…'
+                    : dish.is_active
+                      ? 'Archive'
+                      : 'Reactivate'}
+                </button>
               </li>
             )
           })}
