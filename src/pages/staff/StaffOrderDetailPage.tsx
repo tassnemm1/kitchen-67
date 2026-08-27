@@ -70,6 +70,13 @@ export function StaffOrderDetailPage() {
               </tfoot>
             </table>
 
+            {order.note && (
+              <div className="staff__note">
+                <h2>Note from the guest</h2>
+                <p>{order.note}</p>
+              </div>
+            )}
+
             <Link to="/staff/orders">Back to the orders</Link>
           </>
         )}
