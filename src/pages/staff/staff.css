@@ -271,3 +271,30 @@
   font-weight: 700;
   border-bottom: none;
 }
+
+/* Status flow */
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8125rem;
+  list-style: none;
+}
+
+.flow__step {
+  padding: 0.25rem 0.625rem;
+  color: var(--color-muted);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.flow__step--on {
+  font-weight: 600;
+  color: var(--color-surface);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}

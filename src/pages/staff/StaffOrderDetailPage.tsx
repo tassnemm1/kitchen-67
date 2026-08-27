@@ -3,6 +3,8 @@ import { DataState } from '../../components/DataState'
 import { OrderStatusBadge } from '../../components/OrderStatusBadge'
 import { useOrder } from '../../hooks/useOrders'
 import { formatDateTime, formatPrice } from '../../lib/format'
+import { ORDER_STATUS_LABELS } from '../../lib/orderStatus'
+import { ORDER_STATUS_FLOW } from '../../types/database'
 
 export function StaffOrderDetailPage() {
   const { orderId } = useParams()
@@ -20,6 +22,19 @@ export function StaffOrderDetailPage() {
                 {formatDateTime(order.created_at)}
               </p>
             </div>
+
+            {/* The order walks this flow one step at a time, which a trigger
+                in the database enforces. */}
+            <ol className="flow">
+              {ORDER_STATUS_FLOW.map((status) => (
+                <li
+                  key={status}
+                  className={`flow__step${status === order.status ? ' flow__step--on' : ''}`}
+                >
+                  {ORDER_STATUS_LABELS[status]}
+                </li>
+              ))}
+            </ol>
 
             <p>
               Current status: <OrderStatusBadge status={order.status} />
