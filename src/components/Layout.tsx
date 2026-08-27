@@ -30,7 +30,7 @@ export function Layout() {
 
         {/* Main navigation */}
         <nav className="layout__nav">
-          <NavLink to="/">Menu</NavLink>
+          <NavLink to="/menu">Menu</NavLink>
           <NavLink to="/cart">Cart</NavLink>
 
           {session && <NavLink to="/orders">My Orders</NavLink>}
