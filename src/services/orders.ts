@@ -136,12 +136,15 @@ export async function createOrder(
     error: userError,
   } = await supabase.auth.getUser()
 
-  if (userError) {
-    throw userError
-  }
-
+  // No session at all is the ordinary case for a guest who never logged in.
+  // Supabase reports it as an error, but "Auth session missing!" is not a
+  // sentence to put in front of someone who just wants their food.
   if (!user) {
     throw new Error('You must be logged in to place an order.')
+  }
+
+  if (userError) {
+    throw new Error(userError.message)
   }
 
   // Create order
