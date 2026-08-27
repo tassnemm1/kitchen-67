@@ -7,8 +7,9 @@ import EmptyState from '../components/EmptyState'
 
 import { getActiveDishes, type Dish } from '../services/dishes'
 
-// Menu categories
-const categories = [
+// The order the menu reads best in. It is a preference, not a gate: a category
+// the staff invents later is listed after these instead of being left out.
+const CATEGORY_ORDER = [
   'Burgers',
   'Bowls',
   'Salads',
@@ -16,6 +17,18 @@ const categories = [
   'Desserts',
   'Drinks',
 ]
+
+/** Every category that actually has dishes, preferred ones first. */
+function categoriesInMenu(dishes: Dish[]): string[] {
+  const present = [...new Set(dishes.map((dish) => dish.category))]
+
+  return [
+    ...CATEGORY_ORDER.filter((category) => present.includes(category)),
+    ...present
+      .filter((category) => !CATEGORY_ORDER.includes(category))
+      .sort(),
+  ]
+}
 
 // Menu page
 function MenuPage() {
@@ -73,7 +86,7 @@ function MenuPage() {
       {dishes.length === 0 && <EmptyState />}
 
       {/* Menu categories */}
-      {categories.map((category) => {
+      {categoriesInMenu(dishes).map((category) => {
         const categoryDishes = dishes.filter(
           (dish) => dish.category === category,
         )
