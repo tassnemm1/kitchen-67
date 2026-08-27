@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from 'react-router'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import type { UserRole } from '../types/database'
 
@@ -14,7 +14,7 @@ interface ProtectedRouteProps {
  */
 export function ProtectedRoute({ role }: ProtectedRouteProps) {
   const { session, profile, isLoading } = useAuth()
-  const location = useLocation()
+  const { pathname } = useLocation()
 
   if (isLoading) {
     return <p role="status">Checking your session…</p>
@@ -22,7 +22,7 @@ export function ProtectedRoute({ role }: ProtectedRouteProps) {
 
   if (!session) {
     // Remember where the user was heading so login can send them back.
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />
+    return <Navigate to="/login" state={{ from: pathname }} replace />
   }
 
   if (role && profile?.role !== role) {

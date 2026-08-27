@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "type-coverage": "type-coverage -p tsconfig.app.json --strict --at-least 100",
     "preview": "vite preview"
   },
   "dependencies": {
