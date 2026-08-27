@@ -41,7 +41,7 @@ function OrderConfirmationPage() {
 
         <p>No order information found.</p>
 
-        <Link to="/">Back to Menu</Link>
+        <Link to="/menu">Back to Menu</Link>
       </main>
     )
   }
@@ -77,7 +77,7 @@ function OrderConfirmationPage() {
       </p>
 
       {/* Navigation */}
-      <Link to="/">Back to Menu</Link>
+      <Link to="/menu">Back to Menu</Link>
 
       <br />
 
