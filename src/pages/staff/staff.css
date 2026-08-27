@@ -246,3 +246,28 @@
   font-size: 0.875rem;
   color: var(--color-muted);
 }
+
+/* Order table */
+
+.order-table {
+  width: 100%;
+  font-size: 0.9375rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.order-table th,
+.order-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.order-table tfoot th,
+.order-table tfoot td {
+  font-weight: 700;
+  border-bottom: none;
+}

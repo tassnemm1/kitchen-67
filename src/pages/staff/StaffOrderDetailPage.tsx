@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router'
 import { DataState } from '../../components/DataState'
 import { OrderStatusBadge } from '../../components/OrderStatusBadge'
 import { useOrder } from '../../hooks/useOrders'
-import { formatDateTime } from '../../lib/format'
+import { formatDateTime, formatPrice } from '../../lib/format'
 
 export function StaffOrderDetailPage() {
   const { orderId } = useParams()
@@ -24,6 +24,36 @@ export function StaffOrderDetailPage() {
             <p>
               Current status: <OrderStatusBadge status={order.status} />
             </p>
+
+            <h2>What was ordered</h2>
+            <table className="order-table">
+              <thead>
+                <tr>
+                  <th scope="col">Dish</th>
+                  <th scope="col">Qty</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Sum</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.order_items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.dish_name}</td>
+                    <td>{item.quantity}</td>
+                    <td>{formatPrice(item.unit_price)}</td>
+                    <td>{formatPrice(item.line_total)}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row" colSpan={3}>
+                    Total
+                  </th>
+                  <td>{formatPrice(order.total_amount)}</td>
+                </tr>
+              </tfoot>
+            </table>
 
             <Link to="/staff/orders">Back to the orders</Link>
           </>
