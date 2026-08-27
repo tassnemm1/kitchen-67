@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router'
+import { NavLink, Outlet } from 'react-router-dom'
 import './staff.css'
 
 /** Frame and sub navigation shared by every staff view. */

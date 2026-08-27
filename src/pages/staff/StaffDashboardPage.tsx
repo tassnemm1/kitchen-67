@@ -1,4 +1,4 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { DataState } from '../../components/DataState'
 import { useDishes } from '../../hooks/useDishes'
 import { useOrders } from '../../hooks/useOrders'

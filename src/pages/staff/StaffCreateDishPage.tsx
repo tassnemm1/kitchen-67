@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router-dom'
 import { DishForm } from '../../components/DishForm'
 import { createDish } from '../../services/dishes'
 import type { DishInput } from '../../services/dishes'

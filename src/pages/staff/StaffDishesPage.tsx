@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router-dom'
 import { DataState } from '../../components/DataState'
 import { useDishes } from '../../hooks/useDishes'
 import { formatPrice } from '../../lib/format'

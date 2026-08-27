@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useParams } from 'react-router-dom'
 import { DataState } from '../../components/DataState'
 import { DishForm } from '../../components/DishForm'
 import { DishImageUploader } from '../../components/DishImageUploader'

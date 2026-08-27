@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, Navigate, useNavigate } from 'react-router'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { register as registerAccount } from '../services/auth'
 import './AuthPage.css'
