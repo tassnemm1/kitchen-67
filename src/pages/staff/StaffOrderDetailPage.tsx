@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router'
+import { AdvanceOrderButton } from '../../components/AdvanceOrderButton'
 import { DataState } from '../../components/DataState'
 import { OrderStatusBadge } from '../../components/OrderStatusBadge'
 import { useOrder } from '../../hooks/useOrders'
@@ -8,7 +9,7 @@ import { ORDER_STATUS_FLOW } from '../../types/database'
 
 export function StaffOrderDetailPage() {
   const { orderId } = useParams()
-  const { data: order, isLoading, error } = useOrder(orderId)
+  const { data: order, isLoading, error, reload } = useOrder(orderId)
 
   return (
     <section className="staff__section">
@@ -39,6 +40,12 @@ export function StaffOrderDetailPage() {
             <p>
               Current status: <OrderStatusBadge status={order.status} />
             </p>
+
+            <AdvanceOrderButton
+              orderId={order.id}
+              status={order.status}
+              onAdvanced={reload}
+            />
 
             <h2>What was ordered</h2>
             <table className="order-table">
