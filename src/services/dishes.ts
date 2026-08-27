@@ -1,6 +1,9 @@
 import { supabase } from '../lib/supabase'
 import type { Dish } from '../types/database'
 
+/** Re-exported so the customer pages can keep importing the type from here. */
+export type { Dish }
+
 const DISH_COLUMNS =
   'id, name, description, category, price, image_path, is_active, created_at, updated_at'
 
@@ -34,12 +37,46 @@ export async function listDishes(includeArchived = false): Promise<Dish[]> {
   return data
 }
 
+/** The menu the guests see, in plain alphabetical order. */
+export async function getActiveDishes(): Promise<Dish[]> {
+  const { data, error } = await supabase
+    .from('dishes')
+    .select(DISH_COLUMNS)
+    .eq('is_active', true)
+    .order('name')
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
+
 export async function getDish(id: string): Promise<Dish> {
   const { data, error } = await supabase
     .from('dishes')
     .select(DISH_COLUMNS)
     .eq('id', id)
     .single()
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
+
+/**
+ * The guest facing lookup. An archived dish is treated as missing here, which
+ * is why it returns null instead of throwing.
+ */
+export async function getDishById(id: string): Promise<Dish | null> {
+  const { data, error } = await supabase
+    .from('dishes')
+    .select(DISH_COLUMNS)
+    .eq('id', id)
+    .eq('is_active', true)
+    .maybeSingle()
 
   if (error) {
     throw new Error(error.message)

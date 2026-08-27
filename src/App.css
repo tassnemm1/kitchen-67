@@ -1,0 +1,83 @@
+/* Main page */
+main {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Headings */
+h1 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+/* Cards */
+article,
+main > div {
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 14px;
+  margin: 4px;
+  cursor: pointer;
+}
+
+/* Forms */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Links */
+a {
+  color: inherit;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  main {
+    padding: 24px;
+  }
+
+  h1 {
+    font-size: 34px;
+  }
+
+  article,
+  main > div {
+    padding: 20px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  main {
+    padding: 32px;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+}

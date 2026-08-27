@@ -1,5 +1,5 @@
 {
-  "name": "fed25-fed25-js2-uppgift-3-rojydibi-dot",
+  "name": "fed25-fed25-js2-uppgift-3-tassnemm1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -14,7 +14,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.86.0",
-    "react-router": "^8.3.0"
+    "react-router-dom": "^7.18.2"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
@@ -22,6 +22,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "oxlint": "^1.75.0",
+    "type-coverage": "^2.30.1",
     "typescript": "~6.0.2",
     "vite": "^8.2.0"
   }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import './Layout.css'
 
@@ -23,11 +23,18 @@ export function Layout() {
   return (
     <div className="layout">
       <header className="layout__header">
+        {/* Brand */}
         <Link to="/" className="layout__brand">
-          I Require Sustenance
+           Kitchen 67
         </Link>
 
+        {/* Main navigation */}
         <nav className="layout__nav">
+          <NavLink to="/">Menu</NavLink>
+          <NavLink to="/cart">Cart</NavLink>
+
+          {session && <NavLink to="/orders">My Orders</NavLink>}
+
           {isLoading ? (
             <span className="status">Loading…</span>
           ) : session ? (
@@ -36,6 +43,7 @@ export function Layout() {
               <NavLink to="/profile" className="layout__user">
                 {profile?.full_name || session.user.email}
               </NavLink>
+
               <button
                 type="button"
                 className="button button--quiet layout__sign-out"
@@ -54,7 +62,14 @@ export function Layout() {
       </header>
 
       <main className="layout__main">
-        {signOutError && <p className="alert" role="alert">{signOutError}</p>}
+        {/* Sign out error */}
+        {signOutError && (
+          <p className="alert" role="alert">
+            {signOutError}
+          </p>
+        )}
+
+        {/* Current page */}
         <Outlet />
       </main>
     </div>
