@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router'
+import { AdvanceOrderButton } from '../../components/AdvanceOrderButton'
 import { DataState } from '../../components/DataState'
 import { OrderStatusBadge } from '../../components/OrderStatusBadge'
 import { useOrders } from '../../hooks/useOrders'
@@ -13,7 +14,9 @@ export function StaffOrdersPage() {
 
   // Both branches are stable values, which is what the hook needs to tell one
   // query from another.
-  const { data, isLoading, error } = useOrders(showAll ? undefined : OPEN_STATUSES)
+  const { data, isLoading, error, reload } = useOrders(
+    showAll ? undefined : OPEN_STATUSES,
+  )
   const orders = data ?? []
 
   return (
@@ -63,6 +66,12 @@ export function StaffOrdersPage() {
                 {order.profiles?.full_name || 'Unnamed guest'} ·{' '}
                 {formatDateTime(order.created_at)} · {formatPrice(order.total_amount)}
               </p>
+
+              <AdvanceOrderButton
+                orderId={order.id}
+                status={order.status}
+                onAdvanced={reload}
+              />
             </li>
           ))}
         </ul>
