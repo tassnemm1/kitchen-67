@@ -2,13 +2,21 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '../hooks/useAuth'
 import { createOrder } from '../services/orders'
 
 // Form data
 type CheckoutForm = {
+  note: string
+}
+
+// A change the guest made to a dish
+type SelectedOption = {
+  optionId: string
   name: string
-  email: string
-  phone: string
+  removed: boolean
+  extraQuantity: number
+  extraPrice: number
 }
 
 // Cart item
@@ -17,11 +25,33 @@ type CartItem = {
   name: string
   price: number
   quantity: number
+  options?: SelectedOption[]
+}
+
+/**
+ * Turns the choices the guest made on the dish pages into something the
+ * kitchen can read. Order items have no room of their own for this, so it
+ * travels with the order note.
+ */
+function describeChoices(items: CartItem[]): string {
+  return items
+    .filter((item) => item.options && item.options.length > 0)
+    .map((item) => {
+      const changes = (item.options ?? []).map((option) =>
+        option.removed
+          ? `no ${option.name}`
+          : `extra ${option.name} x${option.extraQuantity}`,
+      )
+
+      return `${item.name}: ${changes.join(', ')}`
+    })
+    .join('\n')
 }
 
 // Checkout page
 function CheckoutPage() {
   const navigate = useNavigate()
+  const { session, profile } = useAuth()
 
   // Order error
   const [orderError, setOrderError] = useState<string | null>(null)
@@ -29,8 +59,10 @@ function CheckoutPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<CheckoutForm>()
+    formState: { isSubmitting },
+  } = useForm<CheckoutForm>({
+    defaultValues: { note: '' },
+  })
 
   // Submit order
   const onSubmit = async (data: CheckoutForm) => {
@@ -50,6 +82,11 @@ function CheckoutPage() {
         throw new Error('Your cart is empty.')
       }
 
+      // What the guest changed, followed by anything they wrote themselves
+      const note = [describeChoices(cartItems), data.note.trim()]
+        .filter(Boolean)
+        .join('\n')
+
       // Create order in Supabase
       const order = await createOrder(
         cartItems.map((item) => ({
@@ -58,6 +95,7 @@ function CheckoutPage() {
           price: item.price,
           quantity: item.quantity,
         })),
+        note,
       )
 
       // Clear cart
@@ -67,7 +105,6 @@ function CheckoutPage() {
       navigate('/order-confirmation', {
         state: {
           order,
-          customer: data,
           items: cartItems,
         },
       })
@@ -87,6 +124,14 @@ function CheckoutPage() {
       {/* Pickup information */}
       <p>Your order will be prepared for pickup.</p>
 
+      {/* Who the order is for. It follows the account, so there is nothing
+          here to fill in. */}
+      {session && (
+        <p className="checkout-customer">
+          Ordering as {profile?.full_name || session.user.email}
+        </p>
+      )}
+
       {/* Order error */}
       {orderError && (
         <p role="alert">
@@ -96,38 +141,16 @@ function CheckoutPage() {
 
       {/* Order form */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Name */}
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          type="text"
-          {...register('name', {
-            required: 'Name is required',
-          })}
-        />
-        {errors.name && <p>{errors.name.message}</p>}
-
-        {/* Email */}
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          {...register('email', {
-            required: 'Email is required',
-          })}
-        />
-        {errors.email && <p>{errors.email.message}</p>}
-
-        {/* Phone */}
-        <label htmlFor="phone">Phone</label>
-        <input
-          id="phone"
-          type="tel"
-          {...register('phone', {
-            required: 'Phone is required',
-          })}
-        />
-        {errors.phone && <p>{errors.phone.message}</p>}
+        {/* Message to the kitchen */}
+        <div className="field">
+          <label htmlFor="note">Anything the kitchen should know?</label>
+          <textarea
+            id="note"
+            rows={3}
+            placeholder="Allergies, or how you want it done. Optional."
+            {...register('note')}
+          />
+        </div>
 
         {/* Place order */}
         <button type="submit" disabled={isSubmitting}>
