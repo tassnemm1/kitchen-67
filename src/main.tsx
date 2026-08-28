@@ -1,22 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from './context/AuthProvider'
 import './index.css'
 import App from './App.tsx'
+import { BrowserRouter } from 'react-router-dom'
 
-const rootElement = document.getElementById('root')
-
-if (!rootElement) {
-  throw new Error('Could not find the root element to mount the app on.')
-}
-
-createRoot(rootElement).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <App />
     </BrowserRouter>
   </StrictMode>,
 )
