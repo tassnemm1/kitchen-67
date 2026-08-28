@@ -13,6 +13,7 @@ export function Layout() {
 
     try {
       await signOut()
+      localStorage.removeItem('cart')
     } catch (caught: unknown) {
       setSignOutError(
         caught instanceof Error ? caught.message : 'Could not sign you out.',

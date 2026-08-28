@@ -48,15 +48,6 @@ function App() {
         {/* Shopping cart */}
         <Route path="cart" element={<CartPage />} />
 
-        {/* Checkout */}
-        <Route path="checkout" element={<CheckoutPage />} />
-
-        {/* Order confirmation */}
-        <Route
-          path="order-confirmation"
-          element={<OrderConfirmationPage />}
-        />
-
         {/* Customer order history */}
         <Route path="orders" element={<OrderHistoryPage />} />
 
@@ -71,6 +62,11 @@ function App() {
 
         {/* Protected pages */}
         <Route element={<ProtectedRoute />}>
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route
+            path="order-confirmation/:id"
+            element={<OrderConfirmationPage />}
+          />
           <Route path="profile" element={<ProfilePage />} />
         </Route>
 

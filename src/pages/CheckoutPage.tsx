@@ -103,12 +103,7 @@ function CheckoutPage() {
       localStorage.removeItem('cart')
 
       // Go to confirmation page
-      navigate('/order-confirmation', {
-        state: {
-          order,
-          items: cartItems,
-        },
-      })
+      navigate(`/order-confirmation/${order.id}`)
     } catch (caught: unknown) {
       setOrderError(
         caught instanceof Error

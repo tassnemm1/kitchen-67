@@ -16,6 +16,7 @@ Built with React, React Router, TypeScript and Supabase (Auth, Database and Stor
 - Sign up and sign in with Supabase Authentication.
 - Browse active dishes on the menu.
 - View dish details.
+- Customize dishes with available options.
 - Add dishes to the shopping cart.
 - Change quantities in the cart.
 - Remove dishes from the cart.
@@ -123,7 +124,7 @@ dishes     1 --- * order_items
 | `profiles` | Name and role for every account |
 | `dishes` | Name, description, category, price, image path and active flag |
 | `orders` | Order number, customer, status, total and note |
-| `order_items` | One line per ordered dish with saved name and price |
+| `order_items` | Ordered dishes with saved name, price and selected options |
 
 An order item stores its own copy of `dish_name` and `unit_price`, so editing
 the menu later does not change an old order.
@@ -139,7 +140,7 @@ in the database.
 - Roles are stored in `public.profiles.role`.
 - A profile is created for a new authenticated user.
 - Customers cannot give themselves staff access.
-- Prices are copied from the menu when order items are created.
+- Prices are calculated from the menu and the selected extras.
 - Order totals are calculated from the order items.
 - Archived dishes cannot be ordered.
 - Customers can only read their own orders and order items.
@@ -208,25 +209,9 @@ npm run build
 npx type-coverage --project tsconfig.app.json --detail
 ```
 
-## Known bugs
-
-- Reloading the order confirmation page loses the order. The page is handed its
-  order through the router state, which does not survive a reload, so a refresh
-  shows "No order information found." The order itself is saved and can be found
-  under My Orders.
-- The cart is not cleared on sign out. It lives in the browser's local storage,
-  so on a shared computer the next person starts with the previous one's dishes
-  still in the cart.
-- Checkout shows its form to a signed out visitor and only refuses the order on
-  submit. Nothing is lost, and the message says what is wrong, but the visitor is
-  told a step too late.
-
 ## Known limitations
 
 - Pickup only. There is no payment and no delivery.
-- The choices a guest makes on a dish, such as extra cheese or no onion, reach
-  the kitchen through the order note. `order_items` has no column of its own for
-  them.
 - Dishes are archived, never deleted, so an old order keeps its contents. The
   database enforces this with `on delete restrict`.
 - An order only moves forward, one step at a time. Nothing takes it back, and a
