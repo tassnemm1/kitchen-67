@@ -5,7 +5,7 @@ const ORDER_COLUMNS =
   'id, order_number, customer_id, status, total_amount, note, created_at, updated_at'
 
 const ORDER_ITEM_COLUMNS =
-  'id, order_id, dish_id, dish_name, unit_price, quantity, line_total'
+  'id, order_id, dish_id, dish_name, unit_price, quantity, line_total, selected_options'
 
 /** The customer name is embedded through orders.customer_id -> profiles.id. */
 export interface OrderListItem extends Order {
@@ -95,6 +95,13 @@ export type OrderCartItem = {
   name: string
   price: number
   quantity: number
+  options?: {
+    optionId: string
+    name: string
+    removed: boolean
+    extraQuantity: number
+    extraPrice: number
+  }[]
 }
 
 // Customer order
@@ -168,6 +175,7 @@ export async function createOrder(
     dish_name: item.name,
     unit_price: item.price,
     quantity: item.quantity,
+    selected_options: item.options ?? [],
   }))
 
   const { error: itemsError } = await supabase

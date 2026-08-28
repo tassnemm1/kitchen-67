@@ -96,6 +96,7 @@ export type Database = {
           line_total: number | null
           order_id: string
           quantity: number
+          selected_options: Json
           unit_price: number
         }
         Insert: {
@@ -105,6 +106,7 @@ export type Database = {
           line_total?: number | null
           order_id: string
           quantity: number
+          selected_options?: Json
           unit_price: number
         }
         Update: {
@@ -114,6 +116,7 @@ export type Database = {
           line_total?: number | null
           order_id?: string
           quantity?: number
+          selected_options?: Json
           unit_price?: number
         }
         Relationships: [

@@ -94,6 +94,7 @@ function CheckoutPage() {
           name: item.name,
           price: item.price,
           quantity: item.quantity,
+          options: item.options,
         })),
         note,
       )
