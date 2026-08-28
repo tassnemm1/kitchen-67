@@ -73,6 +73,32 @@ Copy the Supabase project values into `.env.local`:
 Only client-safe keys belong in it. The `service_role` key must never be added
 to the source code or repository.
 
+## Deployment
+
+The application is a static Vite build, deployed on Netlify. `netlify.toml` holds
+the build command, the publish directory and one redirect rule.
+
+That rule matters more than it looks. React Router owns the addresses, not the
+file system, so a reload on `/menu` would otherwise ask Netlify for a file that
+was never built and the guest would meet a 404 instead of the menu.
+
+Set the two environment variables from `.env.example` under **Site settings ->
+Environment variables** before the first deploy. They are read at build time, so
+a build started before they exist will produce a site that cannot reach Supabase.
+
+Public URL: _fill in once the site is live_
+
+## Test accounts
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Customer | `demo.kund@gmail.com` | `iamhangry` |
+| Staff | `jn@thehiveresistance.com` | `iamhangry` |
+
+The customer account has two orders. One of them contains a dish that was
+archived afterwards, so the order history can be seen holding on to something
+the menu no longer offers.
+
 ## Database
 
 The SQL that defines the schema, Row Level Security policies and storage policies
@@ -181,6 +207,36 @@ npm run lint
 npm run build
 npx type-coverage --project tsconfig.app.json --detail
 ```
+
+## Known bugs
+
+- Reloading the order confirmation page loses the order. The page is handed its
+  order through the router state, which does not survive a reload, so a refresh
+  shows "No order information found." The order itself is saved and can be found
+  under My Orders.
+- The cart is not cleared on sign out. It lives in the browser's local storage,
+  so on a shared computer the next person starts with the previous one's dishes
+  still in the cart.
+- Checkout shows its form to a signed out visitor and only refuses the order on
+  submit. Nothing is lost, and the message says what is wrong, but the visitor is
+  told a step too late.
+
+## Known limitations
+
+- Pickup only. There is no payment and no delivery.
+- The choices a guest makes on a dish, such as extra cheese or no onion, reach
+  the kitchen through the order note. `order_items` has no column of its own for
+  them.
+- Dishes are archived, never deleted, so an old order keeps its contents. The
+  database enforces this with `on delete restrict`.
+- An order only moves forward, one step at a time. Nothing takes it back, and a
+  customer cannot cancel one.
+- Nothing updates by itself. Staff reload the order overview to see new orders.
+- The menu has no search, filtering or sorting.
+- Email confirmation is turned off in Supabase, so a new account can sign in
+  straight away.
+- The cart lives in one browser. It does not follow the customer to another
+  device.
 
 ## Team
 
