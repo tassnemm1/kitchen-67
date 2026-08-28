@@ -72,7 +72,13 @@ function OrderDetailsPage() {
 
       {order.items.map((item) => (
         <div key={item.id}>
-          <h3>{item.dish_name}</h3>
+          {/* The dish as it was ordered. It may since have left the menu, which
+              is why this leads to the order's own copy of it. */}
+          <h3>
+            <Link to={`/orders/${order.id}/dishes/${item.dish_id}`}>
+              {item.dish_name}
+            </Link>
+          </h3>
           <p>Quantity: {item.quantity}</p>
           <p>Price: {item.unit_price} kr</p>
           <p>Line total: {item.line_total} kr</p>
