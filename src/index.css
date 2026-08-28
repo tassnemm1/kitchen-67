@@ -404,6 +404,21 @@ a {
   color: var(--color-muted);
 }
 
+/* Dish details */
+#root .dish-details-image {
+  width: 100%;
+  max-height: 420px;
+  margin-bottom: 1.5rem;
+  object-fit: contain;
+  border-radius: .8rem;
+}
+
+#root .dish-details-category {
+  margin-bottom: .5rem;
+  color: var(--color-accent-dark);
+  font-weight: bold;
+}
+
 /* Dish options */
 #root .dish-option {
   margin: .75rem 0;

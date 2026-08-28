@@ -88,7 +88,7 @@ export async function getDishById(id: string): Promise<Dish | null> {
 export async function createDish(input: DishInput): Promise<Dish> {
   const { data, error } = await supabase
     .from('dishes')
-    .insert(input)
+    .insert({ ...input, is_active: false })
     .select(DISH_COLUMNS)
     .single()
 
@@ -119,5 +119,14 @@ export async function updateDish(
 
 /** Dishes are archived and brought back, never deleted. */
 export async function setDishActive(id: string, isActive: boolean): Promise<Dish> {
+  // An active dish must have an image
+  if (isActive) {
+    const dish = await getDish(id)
+
+    if (!dish.image_path) {
+      throw new Error('Add an image before activating the dish.')
+    }
+  }
+
   return updateDish(id, { is_active: isActive })
 }

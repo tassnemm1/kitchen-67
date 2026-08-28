@@ -9,6 +9,7 @@ import {
   getDishOptions,
   type DishOption,
 } from '../services/dishOptions'
+import { getDishImageUrl } from '../services/dishImages'
 
 // Selected option type
 type SelectedOption = {
@@ -218,9 +219,18 @@ function DishDetailsPage() {
     return <p>Dish not found</p>
   }
 
+  const imageUrl = getDishImageUrl(dish.image_path)
+
   return (
     <main>
-      {/* Dish information */}
+      {/* Dish image */}
+      {imageUrl && (
+        <img className="dish-details-image" src={imageUrl} alt={dish.name} />
+      )}
+
+      {/* Dish category */}
+      <p className="dish-details-category">{dish.category}</p>
+
       <h1>{dish.name}</h1>
 
       <p>{dish.description}</p>

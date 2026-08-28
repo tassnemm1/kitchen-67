@@ -8,7 +8,6 @@ export function StaffCreateDishPage() {
 
   async function handleCreate(input: DishInput) {
     const dish = await createDish(input)
-    // Straight on to the edit view, so the dish can be adjusted right away.
     await navigate(`/staff/dishes/${dish.id}`, { replace: true })
   }
 
@@ -16,7 +15,7 @@ export function StaffCreateDishPage() {
     <section className="staff__section">
       <div className="staff__intro">
         <h1>New dish</h1>
-        <p>The dish goes onto the menu as soon as it is created.</p>
+        <p>Add the dish information first, then upload an image and activate it.</p>
       </div>
 
       <DishForm submitLabel="Create dish" onSubmit={handleCreate} />
