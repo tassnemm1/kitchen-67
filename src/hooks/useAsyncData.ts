@@ -14,13 +14,6 @@ export interface AsyncData<T> {
   reload: () => void
 }
 
-/**
- * Runs a loader and keeps track of its result, its error and whether it is
- * still running, so every view gets the same loading and error handling.
- *
- * `load` has to keep its identity between renders. Wrap it in `useCallback` at
- * the call site, with the query parameters as dependencies.
- */
 export function useAsyncData<T>(
   load: () => Promise<T>,
   fallbackMessage: string,
@@ -54,8 +47,6 @@ export function useAsyncData<T>(
     setCount((current) => current + 1)
   }, [])
 
-  // A result from an older loader or an older reload is ignored rather than
-  // cleared, which keeps the effect above free of synchronous state updates.
   const current = result?.load === load && result.count === count ? result : null
 
   return {

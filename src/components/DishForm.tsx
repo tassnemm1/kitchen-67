@@ -11,13 +11,11 @@ interface DishFormValues {
 }
 
 interface DishFormProps {
-  /** Left out when creating a new dish. */
   dish?: Dish
   submitLabel: string
   onSubmit: (input: DishInput) => Promise<void>
 }
 
-/** Shared by the create and the edit view, so both validate the same way. */
 export function DishForm({ dish, submitLabel, onSubmit }: DishFormProps) {
   const [formError, setFormError] = useState<string | null>(null)
 

@@ -10,7 +10,6 @@ Built with React, React Router, TypeScript and Supabase (Auth, Database and Stor
 
 ### Customer
 
-
 - Welcome landing page with a full-screen restaurant background video.
 - Navigate from the welcome page to the restaurant menu.
 - Sign up and sign in with Supabase Authentication.
@@ -76,16 +75,8 @@ to the source code or repository.
 
 ## Deployment
 
-The application is a static Vite build, deployed on Netlify. `netlify.toml` holds
-the build command, the publish directory and one redirect rule.
-
-That rule matters more than it looks. React Router owns the addresses, not the
-file system, so a reload on `/menu` would otherwise ask Netlify for a file that
-was never built and the guest would meet a 404 instead of the menu.
-
-Set the two environment variables from `.env.example` under **Site settings ->
-Environment variables** before the first deploy. They are read at build time, so
-a build started before they exist will produce a site that cannot reach Supabase.
+The app can be deployed on Netlify. The build settings and React Router redirect
+are in `netlify.toml`. Add the two Supabase environment variables before deploying.
 
 Public URL: _fill in once the site is live_
 
@@ -96,17 +87,10 @@ Public URL: _fill in once the site is live_
 | Customer | `demo.kund@gmail.com` | `iamhangry` |
 | Staff | `jn@thehiveresistance.com` | `iamhangry` |
 
-The customer account has two orders. One of them contains a dish that was
-archived afterwards, so the order history can be seen holding on to something
-the menu no longer offers.
-
 ## Database
 
-The SQL that defines the schema, Row Level Security policies and storage policies
-lives in `supabase/migrations`.
-
-Run the migration files in order in the Supabase SQL Editor when setting up a
-new project.
+The database migrations and security policies are in `supabase/migrations`.
+Run them in order when setting up a new Supabase project.
 
 `supabase/seed.sql` can be used to add sample dishes.
 
@@ -126,16 +110,7 @@ dishes     1 --- * order_items
 | `orders` | Order number, customer, status, total and note |
 | `order_items` | Ordered dishes with saved name, price and selected options |
 
-An order item stores its own copy of `dish_name` and `unit_price`, so editing
-the menu later does not change an old order.
-
-`order_items.dish_id` uses `on delete restrict`. This means a dish that has
-already been ordered cannot be deleted and should instead be archived.
-
 ### What the database enforces
-
-The interface is not what protects the data. Important rules are also enforced
-in the database.
 
 - Roles are stored in `public.profiles.role`.
 - A profile is created for a new authenticated user.
@@ -165,12 +140,6 @@ where id = '<user-id>';
 | `npm run lint` | Run Oxlint |
 | `npm run preview` | Preview the production build locally |
 
-Type coverage can also be checked with:
-
-```bash
-npx type-coverage --project tsconfig.app.json --detail
-```
-
 ## Project structure
 
 ```text
@@ -186,9 +155,7 @@ src/
 
 ## Testing
 
-The application is tested with different user accounts and permissions.
-
-The tests verify that:
+The project was checked with customer and staff accounts. The checks include:
 
 - Customers can browse active dishes.
 - Customers can add dishes to the cart.
@@ -201,12 +168,12 @@ The tests verify that:
 - Row Level Security prevents unauthorized access.
 - Staff and customer permissions are separated.
 
-Before finishing the project, the code can be checked with:
+Code checks:
 
 ```bash
 npm run lint
 npm run build
-npx type-coverage --project tsconfig.app.json --detail
+npm run type-coverage
 ```
 
 ## Known limitations
@@ -226,8 +193,4 @@ npx type-coverage --project tsconfig.app.json --detail
 ## Team
 
 This project was developed as a group assignment by Tasnem and Rojina.
-The work was divided between the team members using separate tasks and feature
-areas. Both team members also participate in testing, database setup,
-documentation and final integration.
-
 Git and Trello are used to organize and track the development process.

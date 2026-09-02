@@ -7,7 +7,6 @@ const ORDER_COLUMNS =
 const ORDER_ITEM_COLUMNS =
   'id, order_id, dish_id, dish_name, unit_price, quantity, line_total, selected_options'
 
-/** The customer name is embedded through orders.customer_id -> profiles.id. */
 export interface OrderListItem extends Order {
   profiles: { full_name: string } | null
 }
@@ -16,10 +15,6 @@ export interface OrderDetail extends OrderListItem {
   order_items: OrderItem[]
 }
 
-/**
- * Staff see every order, a customer only their own. That split lives in the
- * row level security policies, not here, so the same function serves both.
- */
 export async function listOrders(
   statuses?: readonly OrderStatus[],
 ): Promise<OrderListItem[]> {
@@ -52,8 +47,6 @@ export async function getOrder(id: string): Promise<OrderDetail> {
     throw new Error(error.message)
   }
 
-  // line_total is a generated column, so the database always fills it in. The
-  // generated types still call it nullable, hence the fallback.
   return {
     ...data,
     order_items: data.order_items.map((item) => ({
@@ -63,10 +56,6 @@ export async function getOrder(id: string): Promise<OrderDetail> {
   }
 }
 
-/**
- * Moves an order one step forward. The database rejects anything that skips a
- * step or comes from someone who is not staff, so this is only the request.
- */
 export async function setOrderStatus(
   id: string,
   status: OrderStatus,
@@ -85,11 +74,6 @@ export async function setOrderStatus(
   return data
 }
 
-// ---------------------------------------------------------------------------
-// The guest facing side of ordering.
-// ---------------------------------------------------------------------------
-
-// Cart item
 export type OrderCartItem = {
   id: string
   name: string
@@ -104,7 +88,6 @@ export type OrderCartItem = {
   }[]
 }
 
-// Customer order
 export type CustomerOrder = {
   id: string
   order_number: number
@@ -113,7 +96,6 @@ export type CustomerOrder = {
   created_at: string
 }
 
-// Order item
 export type CustomerOrderItem = {
   id: string
   dish_id: string
@@ -123,7 +105,6 @@ export type CustomerOrderItem = {
   line_total: number
 }
 
-// Order details
 export type CustomerOrderDetails = {
   id: string
   order_number: number
@@ -132,20 +113,15 @@ export type CustomerOrderDetails = {
   items: CustomerOrderItem[]
 }
 
-// Create order
 export async function createOrder(
   cartItems: OrderCartItem[],
   note = '',
 ) {
-  // Get logged in user
   const {
     data: { user },
     error: userError,
   } = await supabase.auth.getUser()
 
-  // No session at all is the ordinary case for a guest who never logged in.
-  // Supabase reports it as an error, but "Auth session missing!" is not a
-  // sentence to put in front of someone who just wants their food.
   if (!user) {
     throw new Error('You must be logged in to place an order.')
   }
@@ -154,7 +130,6 @@ export async function createOrder(
     throw new Error(userError.message)
   }
 
-  // Create order
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .insert({
@@ -168,7 +143,6 @@ export async function createOrder(
     throw orderError
   }
 
-  // Add order items
   const items = cartItems.map((item) => ({
     order_id: order.id,
     dish_id: item.id,
@@ -186,7 +160,6 @@ export async function createOrder(
     throw itemsError
   }
 
-  // Get finished order
   const { data: finishedOrder, error: finishedOrderError } =
     await supabase
       .from('orders')
@@ -201,7 +174,6 @@ export async function createOrder(
   return finishedOrder
 }
 
-// Get customer orders
 export async function getCustomerOrders(): Promise<CustomerOrder[]> {
   const { data, error } = await supabase
     .from('orders')
@@ -215,7 +187,6 @@ export async function getCustomerOrders(): Promise<CustomerOrder[]> {
   return data
 }
 
-// Get one customer order
 export async function getCustomerOrderById(
   id: string,
 ): Promise<CustomerOrderDetails | null> {
@@ -233,7 +204,6 @@ export async function getCustomerOrderById(
     return null
   }
 
-  // Get order items
   const { data: items, error: itemsError } = await supabase
     .from('order_items')
     .select(

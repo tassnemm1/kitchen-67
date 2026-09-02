@@ -3,17 +3,12 @@ import type { ReactNode } from 'react'
 interface DataStateProps {
   isLoading: boolean
   error: string | null
-  /** Shown instead of the children when the request came back with nothing. */
   isEmpty?: boolean
   emptyMessage?: string
   loadingMessage?: string
   children: ReactNode
 }
 
-/**
- * One place for the three states every list and detail view shares: loading,
- * failed and nothing to show.
- */
 export function DataState({
   isLoading,
   error,

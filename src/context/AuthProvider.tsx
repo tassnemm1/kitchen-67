@@ -11,8 +11,6 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
-/** The profile and the error are tagged with the user they belong to, so a
- * stale result from a previous user is never shown after a sign out. */
 interface ProfileResult {
   userId: string
   profile: Profile | null
@@ -23,10 +21,6 @@ function toMessage(caught: unknown, fallback: string): string {
   return caught instanceof Error ? caught.message : fallback
 }
 
-/**
- * Keeps the Supabase session and the matching profile row in React state and
- * shares them with the rest of the app.
- */
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null)
   const [isSessionLoading, setIsSessionLoading] = useState(true)
@@ -47,8 +41,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (isActive) setIsSessionLoading(false)
       })
 
-    // Do not call other Supabase methods from inside this callback, it runs
-    // while the auth client holds its internal lock.
     const unsubscribe = onAuthStateChange((nextSession) => {
       if (!isActive) return
       setSession(nextSession)
@@ -97,14 +89,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setSession(null)
   }, [])
 
-  // Results belonging to another user are ignored rather than cleared, which
-  // keeps the effect above free of synchronous state updates.
   const current = profileResult?.userId === userId ? profileResult : null
   const profile = current?.profile ?? null
   const error = current?.message ?? sessionError
 
-  // A signed in user is only ready once the profile has been resolved,
-  // otherwise a role check could run against a profile that is still missing.
   const isLoading = isSessionLoading || (session !== null && current === null)
 
   const value = useMemo<AuthContextValue>(
