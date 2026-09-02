@@ -78,7 +78,7 @@ to the source code or repository.
 The app can be deployed on Netlify. The build settings and React Router redirect
 are in `netlify.toml`. Add the two Supabase environment variables before deploying.
 
-Public URL: _fill in once the site is live_
+Public URL: https://loquacious-tapioca-139023.netlify.app
 
 ## Test accounts
 
